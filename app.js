@@ -12,7 +12,7 @@ app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
-const uri = "mongodb+srv://new_user:2l4xrQACG8XsugAH@cluster0.otmwl.mongodb.net/userLogin?retryWrites=true&writeConcern=majority";
+const uri = "mongodb+srv://" + process.env.DBUSER + ":" + process.env.DBPASSWORD + "@cluster0.otmwl.mongodb.net/userLogin?retryWrites=true&writeConcern=majority";
 
 try {
     mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true }, () => console.log("connected"));
