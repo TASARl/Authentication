@@ -28,6 +28,7 @@ const uri = "mongodb+srv://" + process.env.DBUSER + ":" + process.env.DBPASSWORD
 
 try {
     mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true }, () => console.log("connected"));
+    mongoose.set("useCreateIndex", true);
 } catch (error) {
     console.log("could not connect");
 }
@@ -58,11 +59,30 @@ app.get("/", (req, res) => {
     res.render("home");
 });
 
+app.get("/secrets", function (req, res) {
+    if (req.isAuthenticated()) {
+        res.render("secrets");
+    } else {
+        res.redirect("/login");
+    }
+});
+
 app.route("/register")
     .get((req, res) => {
         res.render("register");
     })
-    .post((req, res) => {});
+    .post((req, res) => {
+        User.register({ username: req.body.username }, req.body.password, function (err, user) {
+            if (err) {
+                console.log(err);
+                res.redirect("/register");
+            } else {
+                passport.authenticate("local")(req, res, function () {
+                    res.redirect("/secrets");
+                });
+            }
+        });
+    });
 
 app.route("/login")
     .get((req, res) => {
