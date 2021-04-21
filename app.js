@@ -1,4 +1,4 @@
-require("dotenv").config(); // dotenv paketini kullanmak için npm ile yükledikten sonra bu şekil eklemek gerekk
+require("dotenv").config(); // dotenv paketini kullanmak için npm ile yükledikten sonra bu şekil eklemek gerek
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
