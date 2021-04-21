@@ -59,6 +59,11 @@ app.get("/", (req, res) => {
     res.render("home");
 });
 
+app.get("/logout", function (req, res) {
+    req.logout();
+    res.redirect("/");
+});
+
 app.get("/secrets", function (req, res) {
     if (req.isAuthenticated()) {
         res.render("secrets");
@@ -88,7 +93,22 @@ app.route("/login")
     .get((req, res) => {
         res.render("login");
     })
-    .post((req, res) => {});
+    .post((req, res) => {
+        const user = new User({
+            username: req.body.username,
+            password: req.body.password,
+        });
+
+        req.login(user, function (err) {
+            if (err) {
+                console.log(err);
+            } else {
+                passport.authenticate("local")(req, res, function () {
+                    res.redirect("/secrets");
+                });
+            }
+        });
+    });
 
 let port = process.env.PORT;
 if (port == null || port == "") {
